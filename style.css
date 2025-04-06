@@ -1,7 +1,4 @@
-@font-face {
-    font-family: 'PixelFont';
-    src: url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-}
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 * {
     margin: 0;
@@ -11,7 +8,7 @@
 }
 
 body {
-    font-family: 'PixelFont', monospace;
+    font-family: 'Press Start 2P', monospace;
     background: linear-gradient(to bottom, #8b9b9e 0%, #8b9b9e 50%, #01011d 50%, #01011d 100%);
     display: flex;
     flex-direction: column;
@@ -145,14 +142,15 @@ body {
 }
 
 #character {
-    width: 80px;
-    height: 43px;
+    width: 90px;
+    height: 48px;
     background-image: url('assets/toma.png');
     background-size: contain;
     background-repeat: no-repeat;
     position: absolute;
     bottom: 0px;
     left: 33px;
+    z-index: 10;
 }
 
 .obstacle {
@@ -161,23 +159,24 @@ body {
     background-repeat: no-repeat;
     bottom: 0px;
     right: 0;
+    z-index: 5;
 }
 
 .gasbomb {
-    width: 23px;
-    height: 40px;
+    width: 35px;
+    height: 60px;
     background-image: url('assets/gasbomb.png');
 }
 
 .bariyer {
-    width: 21px;
-    height: 40px;
+    width: 32px;
+    height: 60px;
     background-image: url('assets/bariyer.png');
 }
 
 .devilToma {
-    width: 80px;
-    height: 55px;
+    width: 90px;
+    height: 65px;
     background-image: url('assets/devilToma.png');
 }
 
@@ -228,7 +227,7 @@ body {
     color: white;
     border: none;
     cursor: pointer;
-    font-family: 'PixelFont', monospace;
+    font-family: 'Press Start 2P', monospace;
     font-size: 12px;
     border: 3px solid #555;
     transition: all 0.2s ease;

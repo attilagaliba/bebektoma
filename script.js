@@ -75,11 +75,20 @@ function startGame() {
 
 // Çarpışma kontrolü
 function checkCollision(obstacle) {
+    // Eğer obstacle'ın boyutları çok küçük veya hiç yoksa çarpışma kontrolü yapma
+    // Bu genellikle DOM elemanı doğru yüklenmemişse olur
+    const obstacleWidth = obstacle.offsetWidth;
+    const obstacleHeight = obstacle.offsetHeight;
+    
+    if (obstacleWidth < 5 || obstacleHeight < 5) {
+        return false;
+    }
+    
     const characterRect = character.getBoundingClientRect();
     const obstacleRect = obstacle.getBoundingClientRect();
     
     // Çarpışma algılama hassasiyetini azalt
-    const buffer = 15; // Tampon bölge
+    const buffer = 25; // Tampon bölgeyi artırıyoruz
     
     return !(
         characterRect.right - buffer < obstacleRect.left + buffer || 
@@ -119,6 +128,14 @@ function generateObstacle() {
     
     // Engeli ekranın dışında başlat
     obstacle.style.right = '0px';
+    
+    // Engelin görünürlüğünü kontrol et
+    setTimeout(() => {
+        // Eğer engel boyutları çok küçük veya sıfırsa, stil sorunları olabilir
+        if (obstacle.offsetWidth < 5 || obstacle.offsetHeight < 5) {
+            console.log("Engel boyutları çok küçük, oyunu yeniden yükleyin!");
+        }
+    }, 100);
     
     // Engel kaldırıldığında sayacı azalt (event yerine direkt metod)
     obstacle.onremove = function() {
