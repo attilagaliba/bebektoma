@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BEBEK TOMA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">BEBEK TOMA</h1>
+    </div>
+    
+    <div class="game-container">
+        <div id="score">0</div>
+        <div id="high-score">EN YÜKSEK: 0</div>
+        <div id="game-over" class="hide">
+            <div class="game-over-text">OYUN BİTTİ</div>
+            <button id="restart-button">YENİDEN BAŞLA</button>
+        </div>
+        <div id="game">
+            <div id="character"></div>
+            <div id="obstacles"></div>
+        </div>
+    </div>
+
+    <div class="assets-showcase">
+        <h2 class="assets-title">OYUN KARAKTERLERİ</h2>
+        <div class="assets-container">
+            <div class="asset-item">
+                <img src="assets/toma.png" alt="TOMA">
+                <p>BEBEK TOMA</p>
+            </div>
+            <div class="asset-item">
+                <img src="assets/gasbomb.png" alt="Gaz Bombası">
+                <p>Gaz Bombası</p>
+            </div>
+            <div class="asset-item">
+                <img src="assets/bariyer.png" alt="Bariyer">
+                <p>Bariyer</p>
+            </div>
+            <div class="asset-item">
+                <img src="assets/devilToma.png" alt="Şeytan TOMA">
+                <p>Şeytan TOMA</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
