@@ -73,6 +73,22 @@ function startGame() {
     updateHighScore();
 }
 
+// Çarpışma kontrolü
+function checkCollision(obstacle) {
+    const characterRect = character.getBoundingClientRect();
+    const obstacleRect = obstacle.getBoundingClientRect();
+    
+    // Çarpışma algılama hassasiyetini azalt
+    const buffer = 15; // Tampon bölge
+    
+    return !(
+        characterRect.right - buffer < obstacleRect.left + buffer || 
+        characterRect.left + buffer > obstacleRect.right - buffer || 
+        characterRect.bottom - buffer < obstacleRect.top + buffer || 
+        characterRect.top + buffer > obstacleRect.bottom - buffer
+    );
+}
+
 // Rastgele engel üretme
 function generateObstacle() {
     if (isGameOver) return;
@@ -104,12 +120,15 @@ function generateObstacle() {
     // Engeli ekranın dışında başlat
     obstacle.style.right = '0px';
     
-    // Engel kaldırıldığında sayacı azalt
-    obstacle.addEventListener('remove', function() {
+    // Engel kaldırıldığında sayacı azalt (event yerine direkt metod)
+    obstacle.onremove = function() {
         activeObstacleCount--;
-    });
+    };
     
     game.appendChild(obstacle);
+    
+    // Debug - engel oluşturma kontrolü
+    console.log("Engel oluşturuldu: " + obstacleType);
 }
 
 // Bir sonraki engeli zamanla
@@ -144,19 +163,6 @@ function scheduleNextObstacle() {
     }, interval);
 }
 
-// Çarpışma kontrolü
-function checkCollision(obstacle) {
-    const characterRect = character.getBoundingClientRect();
-    const obstacleRect = obstacle.getBoundingClientRect();
-    
-    return !(
-        characterRect.right < obstacleRect.left || 
-        characterRect.left > obstacleRect.right || 
-        characterRect.bottom < obstacleRect.top || 
-        characterRect.top > obstacleRect.bottom
-    );
-}
-
 // Oyun döngüsü
 function gameLoop() {
     if (isGameOver) return;
@@ -185,20 +191,25 @@ function gameLoop() {
             obstacle.style.right = '0px';
         }
         
-        const currentPosition = parseInt(obstacle.style.right);
+        const currentPosition = parseInt(obstacle.style.right) || 0;
         const newPosition = currentPosition + gameSpeed;
         
         // Ekrandan çıkan engelleri kaldır
         if (newPosition > window.innerWidth + 100) {
+            if (typeof obstacle.onremove === 'function') {
+                obstacle.onremove();
+            }
             activeObstacleCount--; // Engel kaldırıldığında sayacı azalt
             obstacle.remove();
             score += 10; // Engel atladığında 10 puan ekle
             scoreDisplay.textContent = score;
+            console.log("Engel kaldırıldı, yeni engel sayısı: " + activeObstacleCount);
         } else {
             obstacle.style.right = `${newPosition}px`;
             
             // Çarpışma kontrolü
             if (checkCollision(obstacle)) {
+                console.log("Çarpışma tespit edildi!");
                 gameOver();
                 return;
             }
