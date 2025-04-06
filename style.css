@@ -155,29 +155,33 @@ body {
 
 .obstacle {
     position: absolute;
-    background-size: contain;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     bottom: 0px;
     right: 0;
     z-index: 5;
+    image-rendering: pixelated;
 }
 
 .gasbomb {
-    width: 35px;
-    height: 60px;
+    width: 45px;
+    height: 70px;
     background-image: url('assets/gasbomb.png');
+    background-color: rgba(255, 0, 0, 0.1);
 }
 
 .bariyer {
-    width: 32px;
-    height: 60px;
+    width: 40px;
+    height: 70px;
     background-image: url('assets/bariyer.png');
+    background-color: rgba(255, 0, 0, 0.1);
 }
 
 .devilToma {
-    width: 90px;
-    height: 65px;
+    width: 100px;
+    height: 75px;
     background-image: url('assets/devilToma.png');
+    background-color: rgba(255, 0, 0, 0.1);
 }
 
 #score {

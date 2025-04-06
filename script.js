@@ -6,6 +6,9 @@ const scoreDisplay = document.getElementById('score');
 const gameOverScreen = document.getElementById('game-over');
 const restartButton = document.getElementById('restart-button');
 
+// Debug modu
+const DEBUG_MODE = true; // Geliştirme sırasında true, yayınlamadan önce false yapın
+
 // Oyun durumu
 let isJumping = false;
 let isGameOver = false;
@@ -21,6 +24,7 @@ let lastScoreTime = 0; // Zaman bazlı puan için son zaman
 let lastObstacleType = null; // Son üretilen engel tipi
 let activeObstacleCount = 0; // Ekranda aktif olan engel sayısı
 let canGenerateCloseObstacle = false; // Yakın engel üretme izni
+let debugElements = []; // Debug için oluşturulan elemanları takip etme
 
 // Karakteri zıplatma fonksiyonu
 function jump() {
@@ -87,15 +91,69 @@ function checkCollision(obstacle) {
     const characterRect = character.getBoundingClientRect();
     const obstacleRect = obstacle.getBoundingClientRect();
     
-    // Çarpışma algılama hassasiyetini azalt
-    const buffer = 25; // Tampon bölgeyi artırıyoruz
+    // Çarpışma algılama hassasiyetini ayarla
+    const buffer = 15; // Makul bir tampon bölge
+    
+    // Karakterin hitbox'ını biraz daralt
+    const adjustedCharRect = {
+        left: characterRect.left + 15,
+        right: characterRect.right - 15,
+        top: characterRect.top + 10,
+        bottom: characterRect.bottom - 10
+    };
+    
+    // Engelin hitbox'ını biraz daralt
+    const adjustedObsRect = {
+        left: obstacleRect.left + 5,
+        right: obstacleRect.right - 5,
+        top: obstacleRect.top + 5,
+        bottom: obstacleRect.bottom - 5
+    };
+    
+    // Debug modunda hitbox'ları göster
+    if (DEBUG_MODE) {
+        // Önce eski debug elemanlarını temizle
+        clearDebugElements();
+        
+        // Karakter hitbox'ını göster
+        showHitbox(adjustedCharRect, 'rgba(0, 255, 0, 0.5)');
+        
+        // Engel hitbox'ını göster
+        showHitbox(adjustedObsRect, 'rgba(255, 0, 0, 0.5)');
+    }
     
     return !(
-        characterRect.right - buffer < obstacleRect.left + buffer || 
-        characterRect.left + buffer > obstacleRect.right - buffer || 
-        characterRect.bottom - buffer < obstacleRect.top + buffer || 
-        characterRect.top + buffer > obstacleRect.bottom - buffer
+        adjustedCharRect.right < adjustedObsRect.left || 
+        adjustedCharRect.left > adjustedObsRect.right || 
+        adjustedCharRect.bottom < adjustedObsRect.top || 
+        adjustedCharRect.top > adjustedObsRect.bottom
     );
+}
+
+// Debug elemanlarını temizle
+function clearDebugElements() {
+    debugElements.forEach(elem => {
+        if (elem && elem.parentNode) {
+            elem.parentNode.removeChild(elem);
+        }
+    });
+    debugElements = [];
+}
+
+// Hitbox'ı görünür hale getir
+function showHitbox(rect, color) {
+    const hitbox = document.createElement('div');
+    hitbox.style.position = 'absolute';
+    hitbox.style.left = rect.left + 'px';
+    hitbox.style.top = rect.top + 'px';
+    hitbox.style.width = (rect.right - rect.left) + 'px';
+    hitbox.style.height = (rect.bottom - rect.top) + 'px';
+    hitbox.style.backgroundColor = color;
+    hitbox.style.zIndex = '100';
+    hitbox.style.pointerEvents = 'none'; // Tıklamaları geçir
+    
+    document.body.appendChild(hitbox);
+    debugElements.push(hitbox);
 }
 
 // Rastgele engel üretme
@@ -239,6 +297,11 @@ function gameLoop() {
 // Oyun bitti
 function gameOver() {
     isGameOver = true;
+    
+    // Debug elemanlarını temizle
+    if (DEBUG_MODE) {
+        clearDebugElements();
+    }
     
     // Tüm zamanlanmış görevleri temizle
     if (obstacleGenerationInterval) {
